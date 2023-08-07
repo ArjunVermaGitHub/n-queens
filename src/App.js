@@ -2,82 +2,87 @@ import logo from './logo.svg';
 import './App.css';
 import ChessBoard from './ChessBoard';
 import { useEffect, useRef, useState } from 'react';
-import { count } from 'd3';
 
 function App() {
 
-  const [n,setN] = useState(9)
+  const [n,setN] = useState(25)
+  const rate = useRef(450)
+
   const [safeBoard, setSafeBoard] = useState(true)
-  const [queenRows, setQueenRows]=useState([])
+  const [queenRows, setQueenRows]=useState([1,1])
   let tempQueenRows=[...queenRows]
   const ref = useRef(0)
+  const lastIndex = useRef(1)
 
+  
   useEffect(()=>{
     // for(let i = 0; i < n; i++){
     //   tempQueenRows[i] = 1
     // }
-    // setQueenRows(Array.from({ length: n }, () => 1))
-    // setQueenRows([])
+    ref.current > 1 && setTimeout(()=>{setQueenRows([1,1])},1001)
+    ref.current = 0
+    lastIndex.current = 1
 
   }, [n])
 
   useEffect(()=>{
 
-    console.log("queenRows changed to ", queenRows)
+      console.log({queenRows})
 
-    if(ref.current === 0 || !isSafe(queenRows)){
-      let lastIndex = queenRows.length - 1 > 0 ? queenRows.length - 1 : 0
-      tempQueenRows = [...queenRows]
-        while(lastIndex < n ){
+        if(!isSafe(queenRows) || lastIndex.current < n ){
           ref.current++
-          console.log(ref.current, queenRows, lastIndex)
-          tempQueenRows[lastIndex] = 1
-          setQueenRows(tempQueenRows)
-          console.log(tempQueenRows)
+          // console.log(ref.current, queenRows, lastIndex.current)
+          tempQueenRows[lastIndex.current] = 1
+          if(isSafe(tempQueenRows)){
+            lastIndex.current++
+          tempQueenRows[lastIndex.current] = 1
+
+          }
           while(!isSafe(tempQueenRows)){
-            if(tempQueenRows[lastIndex] < n)
+            if(tempQueenRows[lastIndex.current] < n)
             {              
-              tempQueenRows[lastIndex] = tempQueenRows[lastIndex] + 1
+              tempQueenRows[lastIndex.current] = tempQueenRows[lastIndex.current] + 1
             }
             else{
               tempQueenRows.pop()
-            setQueenRows(tempQueenRows)
 
-              lastIndex--
-              if(tempQueenRows[lastIndex] === n){
+              lastIndex.current--
+              if(tempQueenRows[lastIndex.current] === n){
               tempQueenRows.pop()
-            setQueenRows(tempQueenRows)
-
-                lastIndex--
+                lastIndex.current--
               }
-              tempQueenRows[lastIndex]++
+              tempQueenRows[lastIndex.current]++
             }
-            setQueenRows(tempQueenRows)
+            console.log(tempQueenRows)
+            if(!isSafe(tempQueenRows) || lastIndex.current < n){
+              setTimeout(()=>{
+              setQueenRows(tempQueenRows)
+            },1000/rate.current)
+            }
             // setTimeout(()=>{
             // },1000*count.current)
 
           }
-          lastIndex++
+          lastIndex.current++
         }
 
 
-      // lastIndex = n
+      // lastIndex.current = n
       // tempQueenRows=[...queenRows]
-      // console.log("tqr",tempQueenRows[lastIndex-1])
-      // if(tempQueenRows[lastIndex-1] === n){           /// if the very last col is at the end row
-      //   while(lastIndex === n || tempQueenRows[lastIndex-1] === n+1){      /// while the last col we are manipulating is at the end row
-      //     tempQueenRows[lastIndex-1] = 1
-      //     lastIndex--
-      //     tempQueenRows[lastIndex-1] = tempQueenRows[lastIndex - 1 ] + 1
+      // console.log("tqr",tempQueenRows[lastIndex.current-1])
+      // if(tempQueenRows[lastIndex.current-1] === n){           /// if the very last col is at the end row
+      //   while(lastIndex.current === n || tempQueenRows[lastIndex.current-1] === n+1){      /// while the last col we are manipulating is at the end row
+      //     tempQueenRows[lastIndex.current-1] = 1
+      //     lastIndex.current--
+      //     tempQueenRows[lastIndex.current-1] = tempQueenRows[lastIndex.current - 1 ] + 1
       //   }
       // }
       // else{
-      //   tempQueenRows[lastIndex - 1 ] = tempQueenRows[lastIndex - 1 ] + 1
+      //   tempQueenRows[lastIndex.current - 1 ] = tempQueenRows[lastIndex.current - 1 ] + 1
       // }
-    }
   
 
-  }, [queenRows])
+  }, [queenRows, n])
 
   
 
@@ -99,12 +104,12 @@ function App() {
       }
       return !flag
   }
-
-  console.log(queenRows)
   
   return (
     <>
-      <input onChange={e=>setN(e.target.value)}></input>
+      Number of pieces: <input onChange={e=>setN(e.target.value)}/>
+      Rate of placing piece: <input type="range" value={rate.current} min={1} max={1000} onChange={e=>{rate.current = e.target.value}}/>
+
       <ChessBoard n={n}
         safeBoard = {safeBoard}
         setSafeBoard = {setSafeBoard}
