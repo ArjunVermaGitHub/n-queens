@@ -5,21 +5,26 @@ import { useEffect, useRef, useState } from 'react';
 
 function App() {
 
-  const [n,setN] = useState(25)
-  const rate = useRef(450)
+  const [n,setN] = useState(8)
+  const nContext = useRef(20)
+  const rate = useRef(2)
 
   const [safeBoard, setSafeBoard] = useState(true)
   const [queenRows, setQueenRows]=useState([1,1])
+  
   let tempQueenRows=[...queenRows]
   const ref = useRef(0)
   const lastIndex = useRef(1)
-
+  const solutionsList = useRef([])
   
   useEffect(()=>{
     // for(let i = 0; i < n; i++){
     //   tempQueenRows[i] = 1
     // }
-    ref.current > 1 && setTimeout(()=>{setQueenRows([1,1])},1001)
+    ref.current > 1 && setTimeout(()=>{
+      setSafeBoard(true)
+      setQueenRows([1,1])
+    },2000/rate.current + 200)
     ref.current = 0
     lastIndex.current = 1
 
@@ -28,7 +33,7 @@ function App() {
   useEffect(()=>{
 
       console.log({queenRows})
-
+        tempQueenRows = queenRows
         if(!isSafe(queenRows) || lastIndex.current < n ){
           ref.current++
           // console.log(ref.current, queenRows, lastIndex.current)
@@ -38,14 +43,18 @@ function App() {
           tempQueenRows[lastIndex.current] = 1
 
           }
+          nContext.current = n
           while(!isSafe(tempQueenRows)){
+            console.log(nContext.current, {n})
+            if(nContext.current!==n){
+              // break
+            }
             if(tempQueenRows[lastIndex.current] < n)
             {              
               tempQueenRows[lastIndex.current] = tempQueenRows[lastIndex.current] + 1
             }
             else{
               tempQueenRows.pop()
-
               lastIndex.current--
               if(tempQueenRows[lastIndex.current] === n){
               tempQueenRows.pop()
@@ -54,15 +63,20 @@ function App() {
               tempQueenRows[lastIndex.current]++
             }
             console.log(tempQueenRows)
-            if(!isSafe(tempQueenRows) || lastIndex.current < n){
-              setTimeout(()=>{
-              setQueenRows(tempQueenRows)
-            },1000/rate.current)
+            
             }
             // setTimeout(()=>{
             // },1000*count.current)
 
           }
+          if(isSafe(tempQueenRows) && lastIndex.current === n){
+            return
+          }
+          if(isSafe(tempQueenRows) || lastIndex.current < n){
+            setTimeout(()=>{
+              console.log(new Date())
+                setQueenRows([...tempQueenRows])
+          },2000/rate.current)
           lastIndex.current++
         }
 
@@ -82,7 +96,7 @@ function App() {
       // }
   
 
-  }, [queenRows, n])
+  }, [queenRows])
 
   
 
@@ -104,17 +118,27 @@ function App() {
       }
       return !flag
   }
+
+  console.log(queenRows.length === n && isSafe(queenRows))
   
   return (
     <>
-      Number of pieces: <input onChange={e=>setN(e.target.value)}/>
+      Number of pieces: <input id="num"/>
+      <button onClick={e=>setN(+document.getElementById("num").value)}>Set Number of pieces</button><br/>
       Rate of placing piece: <input type="range" value={rate.current} min={1} max={1000} onChange={e=>{rate.current = e.target.value}}/>
-
+      {(2/rate.current).toFixed(3) + " Seconds per piece"}
       <ChessBoard n={n}
         safeBoard = {safeBoard}
         setSafeBoard = {setSafeBoard}
         queenRows={queenRows}
-      />
+      /><br/>
+      <button disabled={!(queenRows.length === n && isSafe(queenRows))} onClick={()=>{
+        let tempQueenRows = [...queenRows]
+        if(tempQueenRows.at(-1) <= n){
+          tempQueenRows[tempQueenRows.length-1]++
+        setQueenRows(tempQueenRows)
+        }
+      }}>Next solution</button>
     </>
   );
 }
