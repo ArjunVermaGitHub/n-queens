@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import './ChessBoard.scss'
 
 export default function ChessBoard({n, queenRows, safeBoard, setSafeBoard}) {
     
@@ -33,7 +34,7 @@ export default function ChessBoard({n, queenRows, safeBoard, setSafeBoard}) {
         arr.push(arr2)
     }
   return (
-    <div>ChessBoard
+    <div className='chessboard-holder'>
         {arr.map(subArr=><div className='row'>
             {
                 subArr.map(

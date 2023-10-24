@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Slabien';
+    src: url('Slabien-Regular.eot');
+    src: local('Slabien Regular'), local('Slabien-Regular'),
+        url('Slabien-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Slabien-Regular.woff2') format('woff2'),
+        url('Slabien-Regular.woff') format('woff'),
+        url('Slabien-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

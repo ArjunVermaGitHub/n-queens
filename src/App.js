@@ -1,7 +1,8 @@
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import ChessBoard from './ChessBoard';
 import { useEffect, useRef, useState } from 'react';
+import './fonts/Slabien-Regular.ttf'
 
 function App() {
 
@@ -122,10 +123,11 @@ function App() {
   console.log(queenRows.length === n && isSafe(queenRows))
   
   return (
-    <>
-      Number of pieces: <input id="num"/>
+    <section>
+      <h1>N-Queens Simulator</h1>
+      Number of pieces: <input id="num" defaultValue={n}/>
       <button onClick={e=>setN(+document.getElementById("num").value)}>Set Number of pieces</button><br/>
-      Rate of placing piece: <input type="range" value={rate.current} min={1} max={1000} onChange={e=>{rate.current = e.target.value}}/>
+      Rate of placing piece: <input type="range" min={1} max={1000} onChange={e=>{rate.current = e.target.value}}/>
       {(2/rate.current).toFixed(3) + " Seconds per piece"}
       <ChessBoard n={n}
         safeBoard = {safeBoard}
@@ -139,7 +141,7 @@ function App() {
         setQueenRows(tempQueenRows)
         }
       }}>Next solution</button>
-    </>
+    </section>
   );
 }
 
