@@ -78,30 +78,58 @@ button{
 section{
   padding: 10px;
   background: #95adda;
+  height: 100%;
+  overflow: auto;
 }
-input[type=range] {
-  height: 38px;
+// input:not([type=range]){
+//   background-color: #d0dcf2;
+//   padding: 4px 8px;
+//   width: 50px;
+//   border-radius: 4px;
+// }
+.slider {
+  // height: 38px;
   margin: 10px 0;
-  width: 100%;
+  width: 500px;
   &::-webkit-slider-runnable-track {
     width: 100%;
     height: 10px;
     cursor: pointer;
-    animate: 0.2s;
     box-shadow: 1px 1px 1px #000000;
-    background: #3071A9;
+    background: rgb(136, 139, 192);
     border-radius: 5px;
     border: 1px solid #000000;
   }
   &::-webkit-slider-thumb { 
-    box-shadow: 1px 1px 1px #000000;
-    border: 1px solid #000000;
-    height: 30px;
-    width: 15px;
-    border-radius: 5px;
-    background: #FFFFFF;
+    background-color: black !important;
     cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -11px;
+    margin-top: -5px;
   }
+}
+.chessboard-holder{
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  .row{
+    &:first-child>div {
+      border-top: 1px solid black;
+    }
+    &:last-of-type>div{
+      // background-color: pink;
+      border-bottom: 1px solid black;
+    }
+    &>div:first-of-type{
+      border-left: 1px solid black;
+    }
+    &>div:last-of-type{
+      border-right: 1px solid black;
+    }
+  }
+}
+
+
+html, body, #root{
+  height: 100%
 }

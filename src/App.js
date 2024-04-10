@@ -127,7 +127,7 @@ function App() {
       <h1>N-Queens Simulator</h1>
       Number of pieces: <input id="num" defaultValue={n}/>
       <button onClick={e=>setN(+document.getElementById("num").value)}>Set Number of pieces</button><br/>
-      Rate of placing piece: <input type="range" min={1} max={1000} onChange={e=>{rate.current = e.target.value}}/>
+      Rate of placing piece: <input className='slider' type="range" min={1} max={1000} onChange={e=>{rate.current = e.target.value}}/>
       {(2/rate.current).toFixed(3) + " Seconds per piece"}
       <ChessBoard n={n}
         safeBoard = {safeBoard}
